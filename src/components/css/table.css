@@ -1,0 +1,19 @@
+.custom-btn-grp {
+    align-items: center;
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.table .MuiTableCell-root {
+    display: table-cell;
+    padding: 5px;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    border-left: none;
+    border-right: none;
+}
+
+.table .MuiSelect-outlined.MuiSelect-outlined {
+    width: 80px;
+}

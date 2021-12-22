@@ -1,0 +1,38 @@
+.container_form {
+    width: 30%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    .MuiSelect-outlined.MuiSelect-outlined {
+        min-width: 346px;
+    }
+    .MuiOutlinedInput-root {
+        height: 55.98px;
+    }
+    .MuiFormControl-root {
+        width: 391.97px;
+    }
+    .MuiButton-containedPrimary {
+        padding: 6px 63px;
+        margin: 10px;
+    }
+}
+input[type="text"], input[type="email"], input[type="password"], select, input[type="submit"] {
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F9FAFF;
+    padding: 20px;
+    h4 {
+        font-size: 21px;
+        margin: 0;
+    }
+}

@@ -1,10 +1,16 @@
-import React from "react";
-import ToDoContainer from "./containers/ToDoContainer";
+import React, { Suspense } from "react";
+import Routes from './main/routes';
 
 const App = () => {
   return (
     <React.Fragment>
-      <ToDoContainer />
+      <Suspense
+        fallback={
+          <div>
+          </div>
+        }>
+        <Routes />
+      </Suspense>
     </React.Fragment>
   );
 };

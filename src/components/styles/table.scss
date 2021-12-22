@@ -1,0 +1,39 @@
+.table {
+    .MuiTableCell-root {
+        display: table-cell;
+        padding: 5px;
+        border-bottom: 1px solid rgba(224, 224, 224, 1);
+        border-left: none;
+        border-right: none;
+    }
+    .MuiSelect-outlined.MuiSelect-outlined {
+        width: 80px;
+    }
+} 
+.d-flex {
+    display: flex;
+    align-items: center;
+    .btn-primary {
+        background: #F5F6FA;
+        padding: 10px 12px;
+        margin: 0 5px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+    }
+}
+.headWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #E8EAF2;
+    margin-bottom: 15px;
+    padding: 0 25px;
+}
+.text-center {
+    text-align: center;
+}
+.pb-15 {
+    padding-bottom: 14px;
+}

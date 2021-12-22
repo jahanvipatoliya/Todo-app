@@ -1,17 +1,11 @@
-import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { MenuItem, makeStyles, Drawer, FormControl, Select, Button, TextField } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
 import TableToDoList from "./tableFunCompo";
-import "./css/form.css";
+import "./styles/form.scss";
 import { connect } from "react-redux";
 import { addtoTable, editItem } from "../Services/Actions/action";
-import moment from "moment";
+import closeIcon from '../assets/images/close.svg'
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -38,229 +32,164 @@ const useStyle = makeStyles((theme) => ({
 const ToDoListFunCompo = (props) => {
   const classes = useStyle();
   const [list, setList] = useState([]);
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState({ category: 'category1' });
   const [count, setCount] = useState(1);
   const [errors, setErrors] = useState({});
   const [submitBtn, setSubmitBtn] = useState(true);
   const [updateBtn, setUpdateBtn] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [categoryList, setCategoryList] = useState(
+    [
+      { color: 'red', value: 'category1' },
+      { color: 'green', value: 'category2' },
+      { color: 'yellow', value: 'category3' },
+      { color: 'gray', value: 'category4' },
+      { color: 'blue', value: 'category5' }
+    ]
+  );
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
-
   const SubmitHandler = (e) => {
     e.preventDefault();
     var inputVal = input;
-
     inputVal = {
       id: count,
-      gender: input.gender,
-      name: input.name,
-      companyname: input.companyname,
-      DOB: input.DOB,
-      DOC: input.DOC,
+      productname: input.productname,
+      category: input.category
     };
-
     const flagData = isValidate();
-
     if (flagData) {
       list.push(inputVal);
       props.addtoTable(inputVal);
-
       setCount((prevCount) => {
         return prevCount + 1;
       });
       setInput({
         id: "",
-        gender: "",
-        name: "",
-        companyname: "",
-        DOB: "",
-        DOC: "",
+        productname: "",
+        category: ""
       });
     }
   };
-
   //error validation
   const isValidate = () => {
     var val = input;
     let errors = {};
     let flag = true;
 
-    if (!val.gender) {
-      errors.gender = "gender is required";
+    if (!val.productname) {
+      errors.productname = "Product Name is required";
       flag = false;
     }
-
-    if (!val.name) {
-      errors.name = "name is required";
+    if (!val.category) {
+      errors.category = "category is required";
       flag = false;
     }
-    if (!val.companyname) {
-      errors.companyname = "company name is required";
-      flag = false;
-    }
-    if (!val.DOB) {
-      errors.DOB = "date of birth is required";
-      flag = false;
-    }
-    if (!val.DOC) {
-      errors.DOC = "date of creation is required";
-      flag = false;
-    }
-
     setErrors(errors);
     return flag;
   };
 
   const editFormData = (row) => {
-    // props.editItem(row);
-    // console.log("selected data", props.selectedData);
     setInput(row);
     setUpdateBtn(true);
     setSubmitBtn(false);
   };
 
-  // const updaterowItem = () => {
-  //   console.log("updated");
-  // };
-
   const updateItem = (e) => {
     if (isValidate()) {
       let updateList = list.map((updatedUser) => {
         if (updatedUser.id === input.id) {
-          updatedUser.gender = input.gender;
-          updatedUser.name = input.name;
-          updatedUser.companyname = input.companyname;
-          updatedUser.DOB = input.DOB;
-          updatedUser.DOC = input.DOC;
+          updatedUser.productname = input.productname;
+          updatedUser.category = input.category
         }
         return updatedUser;
       });
       setInput({
         id: "",
-        gender: "",
-        name: "",
-        companyname: "",
-        DOB: "",
-        DOC: "",
+        productname: "",
+        category: ""
       });
       setList(updateList);
       setUpdateBtn(false);
       setSubmitBtn(true);
     }
   };
+  const toggleDrawer = () => setPopoverOpen(!popoverOpen);
+
   return (
     <React.Fragment>
       <div>
-        <div className='container_form'>
-          <form className={classes.root} onSubmit={(e) => SubmitHandler(e)}>
-            <br />
-            <FormControl variant='outlined' className={classes.formControl}>
-              <InputLabel id='demo-simple-select-outlined-label'>
-                Gender
-              </InputLabel>
-              <Select
-                labelId='demo-simple-select-outlined-label'
-                id='demo-simple-select-outlined'
-                onChange={(e) => changeHandler(e)}
-                name='gender'
-                label='Gender'>
-                <MenuItem name='Male' value='Male'>
-                  Male
-                </MenuItem>
-                <MenuItem name='Female' value='Female'>
-                  Female
-                </MenuItem>
-                <MenuItem name='Other' value='Other'>
-                  Other
-                </MenuItem>
-              </Select>
-              <div>
-                {errors.gender ? (
-                  <Alert severity='error'>{errors.gender}</Alert>
-                ) : null}
-              </div>
+        <Drawer width={400} openSecondary={true} open={popoverOpen} anchor='right'>
+          <div className="modal-header">
+            <h4>Form</h4>
+            <img src={closeIcon} alt="close" onClick={toggleDrawer} />
+          </div>
+          <div className='container_form'>
+            <form className={classes.root} onSubmit={(e) => SubmitHandler(e)}>
               <br />
-              <TextField
-                id='outlined-name'
-                label='Name'
-                name='name'
-                variant='outlined'
-                value={input?.name}
-                onChange={(e) => changeHandler(e)}
-              />
-              <div>
-                {errors.name ? (
-                  <Alert severity='error'>{errors.name}</Alert>
-                ) : null}
-              </div>
-              <br />
-              <TextField
-                id='outlined-name'
-                label='Company Name'
-                name='companyname'
-                variant='outlined'
-                value={input?.companyname}
-                onChange={(e) => changeHandler(e)}
-              />
-              <div>
-                {errors.companyname ? (
-                  <Alert severity='error'>{errors.companyname}</Alert>
-                ) : null}
-              </div>
-              <br />
-              <TextField
-                id='outlined-name'
-                label='Date of Creation'
-                name='DOC'
-                variant='outlined'
-                value={input?.DOC}
-                defaultValue={moment(new Date()).format("YYYY-MM-DD")}
-                onChange={(e) => changeHandler(e)}
-                type='date'
-              />
-              <div>
-                {errors.DOC ? (
-                  <Alert severity='error'>{errors.DOC}</Alert>
-                ) : null}
-              </div>
-              <br />
-              <TextField
-                id='outlined-name'
-                label='Date of birth'
-                name='DOB'
-                variant='outlined'
-                defaultValue={moment(new Date()).format("YYYY-MM-DD")}
-                value={input?.DOB}
-                onChange={(e) => changeHandler(e)}
-                type='date'
-              />
-              <div>
-                {errors.DOB ? (
-                  <Alert severity='error'>{errors.DOB}</Alert>
-                ) : null}
-              </div>
-              <br />
-              {submitBtn ? (
-                <Button type='submit' variant='contained' color='primary'>
-                  Submit
-                </Button>
-              ) : null}
-              {updateBtn ? (
-                <Button
-                  onClick={updateItem}
-                  variant='contained'
-                  color='primary'>
-                  Update
-                </Button>
-              ) : null}
-            </FormControl>
-          </form>
-        </div>
-        <br />
-        <TableToDoList editFormData={editFormData} />
+              <FormControl variant='outlined' className={classes.formControl}>
+                <TextField
+                  id='outlined-name'
+                  label='Product Name'
+                  name='productname'
+                  variant='outlined'
+                  value={input?.productname}
+                  onChange={(e) => changeHandler(e)}
+                />
+                <div>
+                  {errors.productname ? (
+                    <Alert severity='error'>{errors.productname}</Alert>
+                  ) : null}
+                </div>
+                <br />
+                <Select
+                  labelId='demo-simple-select-outlined-label'
+                  id='demo-simple-select-outlined'
+                  onChange={(e) => changeHandler(e)}
+                  name='category'
+                  label='Category'
+                  value={input?.category}
+                >
+                  {categoryList.map(item => (
+                    <MenuItem name={item?.value} value={item?.value}>
+                      {item?.value}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {console.log('errors', errors)}
+                <div>
+                  {errors.gender ? (
+                    <Alert severity='error'>{errors.category}</Alert>
+                  ) : null}
+                </div>
+                <br />
+                <div>
+                  <Button variant='contained' onClick={toggleDrawer}>
+                    Cancel
+                  </Button>
+                  {submitBtn ? (
+                    <Button type='submit' variant='contained' color='primary'>
+                      Save
+                    </Button>
+                  ) : null}
+                  {updateBtn ? (
+                    <Button
+                      onClick={updateItem}
+                      variant='contained'
+                      color='primary'>
+                      Update
+                    </Button>
+                  ) : null}
+                </div>
+              </FormControl>
+            </form>
+          </div>
+          <br />
+        </Drawer>
+        <TableToDoList categoryList={categoryList} editFormData={editFormData} toggleDrawer={toggleDrawer} toggleDrawer={toggleDrawer} />
       </div>
     </React.Fragment>
   );
